@@ -213,10 +213,10 @@ a:active {
   #about {
       background-image: url(../img/profile-banner1.jpg); 
       background-size: cover;
-      background-position: center center;
+      background-position: center right;
       background-repeat: no-repeat;
   }
-
+  
   #about h1 {
     /*font-size: 100%;*/
   }
