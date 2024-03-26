@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSPL Projects Catalog</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 70px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .catalog-item {
+            margin-bottom: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .catalog-item:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .catalog-item h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .catalog-item p {
+            margin-bottom: 0;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">PSPL</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#products">Products</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 id="projects">Projects</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="catalog-item">
+                    <h3>Navin's simple calculator</h3>
+                    <p>a simple calculator</p>
+                    <a href="navin_calculator/index.html" class="btn btn-primary">View Project</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="catalog-item">
+                    <h3>Project 2</h3>
+                    <p>Description of Project 2</p>
+                    <a href="project2.html" class="btn btn-primary">View Project</a>
+                </div>
+            </div>
+        </div>
+
+        <h2 id="products">Products</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="catalog-item">
+                    <h3>Product 1</h3>
+                    <p>Description of Product 1</p>
+                    <a href="product1.html" class="btn btn-primary">View Product</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="catalog-item">
+                    <h3>Product 2</h3>
+                    <p>Description of Product 2</p>
+                    <a href="product2.html" class="btn btn-primary">View Product</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
