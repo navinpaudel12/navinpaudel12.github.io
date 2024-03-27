@@ -213,9 +213,14 @@ a:active {
   #about {
       background-image: url(../img/profile-banner1.jpg); 
       background-size: cover;
-      background-position: center right;
+      background-position: center center;
       background-repeat: no-repeat;
   }
+  @media (max-width: 550px) { #about { background-position: -400px 0; } }
+  @media (max-width: 446px) { #about { background-position: -600px 0; } }
+  @media (max-width: 348px) { #about { background-position: -750px 0; } }
+  
+  
   
   #about h1 {
     /*font-size: 100%;*/
