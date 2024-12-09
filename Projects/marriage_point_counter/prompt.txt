@@ -1,0 +1,24 @@
+i need at marriage card game counter responsive web app made using html,css and javascript for marriage card game players of Nepal. 
+the app not a game itself but it is a counter assistant for physically card playing players to count effortlessly, accurately and faster. Here's how it should be:
+1. at home page there should be list of games (with new game option at the top) named with game1, game2 with low focused last updated date & time with short weekdays which we played earlier. which means each game can have different players as all players don't play all the time. and player can continue to the previous game of same players
+2. add home button to each page so that user can navigate easily to next game without losing current game data
+3. make UI look more professional with proper alignments and texts
+4. on new game players see the game setting for each new game not on existing game. settings include in integers input field; Point rate(default value 1), seen point(default value 3), unseen point(default value 10), dublee win bonus(default value 5) and "save and start game" button
+5. before starting user should entry the players name minimum of 2 and maximum of 8 players
+6. each game should have rounds each round should have a. at least and only one winner selection button b. Maal entry integer field for each players c. status of each players: seen, unseen, dublee selection button(dublee is only available if there are at least four players participated at this game)
+7. default status is unseen of each player, if some integer entered status should auto select to seen and can also be modified by user. if later forcefully modified status to unseen Maal of this player also should have 0 and if again modified his maal point status should change to seen. and winners status is ethier seen or dublee but not unseen.
+8. at end add a button of "calucalte with Total Maal (total maal of each players)" this button calculates the payable and receivable to this round and shows on a row of this round. each row should have focused letter of payable amount with red text negative integer and receivable amount with green text positive integer and on not focused letter of points of this round of each palyers,his staus icon(like seen icon, unseen icon,dublee icon),winner tag icon to winner. note: payable amount= payable points * point rate entered in setting before starting this game receivable amount= receivable points * point rate entered in setting before starting this game
+9. heres how payable/receivable points calculated: 
+a. seen & dublee winner's payable/receivable points are calculated by adding and substracting to other playres' payable/receivable points. other player's payable is winner's receivable and other player's receivable is winners receivable. 
+b. for other players whose status of this round is seen and winner of this round is seen: (his maal of this round*number of players of this game)-(total maal of all players of this round + seen point entered in setting before starting this game) 
+c. for other plyers whose status of this round is unseen and winner of this round is seen: 0-(total maal of all players of this round + unseen point entered in setting before starting this game) 
+d. for other players whose status of this round is seen and winner of this round is dublee: (his maal of this round*number of players of this game)-(total maal of all players of this round + seen point entered in setting before starting this game+dublee win bonus entered in setting before starting this game) 
+e. for other plyers whose status of this round is unseen and winner of this round is dublee: 0-(total maal of all players of this round + unseen point entered in setting before starting this game + dublee win bonus entered in setting before starting this game)
+f. for other players dublee but not winner: do not add seen point entered in setting before starting this game 
+
+9. each round should have edit button so that user can correct if any mistakes
+10. at the last focused row there should be a total payable/receivable amount of each player.
+
+as this app doesnt require login all the game data should be saved in users local storage if users come back again any time even after months his data should not be deleted if user did not open the website on icognito and not cleared any browsing data.
+app should be very precise detailed professional app code. the app should be suitable for mobile view and also responsive for some desktop users
+if my calculation is wrong and you konw the marriage game point count rules please suggest.

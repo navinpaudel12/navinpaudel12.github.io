@@ -1,0 +1,89 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+h1 {
+  margin: 0;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin: 10px 0;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+section {
+  margin: 20px 0;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin: 5px 0;
+}
+
+input[type="number"],
+input[type="text"] {
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 10px;
+  background-color: #fff;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+}
+
+#rounds {
+  display: flex;
+  flex-direction: column;
+}
+
+#calculateTotal {
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
