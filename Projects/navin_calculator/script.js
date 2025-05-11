@@ -1,6 +1,8 @@
 let tabCount = 1;
 let tabsData;
 let isScientificMode = false;
+let historyStack = [];
+let redoStack = [];
 
 // Initialize tabsData with default if localStorage is invalid
 try {
@@ -18,7 +20,6 @@ const numericButtonTemplate = `
     <button onclick="appendToInput(this)" class="calc-btn">8</button>
     <button onclick="appendToInput(this)" class="calc-btn">9</button>
     <button onclick="appendToInput(this)" class="calc-btn">/</button>
-    <button onclick="appendToInput(this)" class="calc-btn">÷</button>
     <button onclick="appendToInput(this)" class="calc-btn">4</button>
     <button onclick="appendToInput(this)" class="calc-btn">5</button>
     <button onclick="appendToInput(this)" class="calc-btn">6</button>
@@ -31,10 +32,10 @@ const numericButtonTemplate = `
     <button onclick="appendToInput(this)" class="calc-btn">.</button>
     <button onclick="appendToInput(this)" class="calc-btn">0</button>
     <button onclick="appendToInput(this)" class="calc-btn">00</button>
-    <button onclick="appendToInput(this)" class="calc-btn">000</button>
     <button onclick="backspace(this)" class="calc-btn">⌫</button>
     <button onclick="clearInput(this)" class="calc-btn">C</button>
     <button onclick="addRow(this)" class="calc-btn">Next Line</button>
+    <button onclick="toggleMode(this)" class="calc-btn">Scientific</button>
 `;
 
 const scientificButtonTemplate = `
@@ -50,7 +51,7 @@ const scientificButtonTemplate = `
     <button onclick="appendToInput(this)" class="calc-btn">e</button>
     <button onclick="appendToInput(this)" class="calc-btn">(</button>
     <button onclick="appendToInput(this)" class="calc-btn">)</button>
-    <button onclick="appendToInput(this)" class="calc-btn">÷</button>
+    <button onclick="appendToInput(this)" class="calc-btn"><span class="fraction"><sup>a</sup>/<sub>b</sub></span></button>
     <button onclick="appendToInput(this)" class="calc-btn">/</button>
     <button onclick="appendToInput(this)" class="calc-btn">*</button>
     <button onclick="appendToInput(this)" class="calc-btn">-</button>
@@ -59,15 +60,52 @@ const scientificButtonTemplate = `
     <button onclick="backspace(this)" class="calc-btn">⌫</button>
     <button onclick="clearInput(this)" class="calc-btn">C</button>
     <button onclick="addRow(this)" class="calc-btn">Next Line</button>
+    <button onclick="toggleMode(this)" class="calc-btn">Numeric</button>
 `;
+
+function saveState() {
+    historyStack.push(JSON.stringify(tabsData));
+    redoStack = [];
+    if (historyStack.length > 50) historyStack.shift();
+}
+
+function undo() {
+    if (historyStack.length > 0) {
+        redoStack.push(JSON.stringify(tabsData));
+        tabsData = JSON.parse(historyStack.pop());
+        localStorage.setItem('calcTabs', JSON.stringify(tabsData));
+        loadTabData();
+        const activeInput = document.querySelector('.tab-pane.active .calc-input');
+        if (activeInput) activeInput.focus();
+    }
+}
+
+function redo() {
+    if (redoStack.length > 0) {
+        historyStack.push(JSON.stringify(tabsData));
+        tabsData = JSON.parse(redoStack.pop());
+        localStorage.setItem('calcTabs', JSON.stringify(tabsData));
+        loadTabData();
+        const activeInput = document.querySelector('.tab-pane.active .calc-input');
+        if (activeInput) activeInput.focus();
+    }
+}
+
+function toggleNightMode() {
+    document.body.classList.toggle('night-mode');
+    document.querySelector('.header').classList.toggle('night-mode');
+}
+
+function toggleOptions() {
+    document.querySelector('.options').classList.toggle('active');
+}
 
 function calculate(input) {
     let expression = input.value;
-    // Replace ÷ with / for evaluation
+    expression = expression.replace(/<span class="fraction"><sup>a<\/sup>\/<sub>b<\/sub><\/span>/g, '/');
     expression = expression.replace(/÷/g, '/');
-    // Replace scientific functions with math.js equivalents (for simplicity, using eval here)
     try {
-        const result = eval(expression); // Note: eval is used for simplicity; consider math.js for production
+        const result = eval(expression);
         input.parentElement.querySelector('.calc-result').textContent = isNaN(result) ? '' : result;
         saveTabData();
     } catch {
@@ -77,13 +115,16 @@ function calculate(input) {
 
 function appendToInput(button) {
     const input = button.closest('.tab-pane').querySelector('.calc-input:focus') || button.closest('.tab-pane').querySelector('.calc-input');
-    input.value += button.textContent;
+    saveState();
+    const content = button.innerHTML.includes('fraction') ? '<span class="fraction"><sup>a</sup>/<sub>b</sub></span>' : button.textContent;
+    input.value += content;
     input.focus();
     calculate(input);
 }
 
 function backspace(button) {
     const input = button.closest('.tab-pane').querySelector('.calc-input:focus') || button.closest('.tab-pane').querySelector('.calc-input');
+    saveState();
     input.value = input.value.slice(0, -1);
     input.focus();
     calculate(input);
@@ -91,6 +132,7 @@ function backspace(button) {
 
 function clearInput(button) {
     const input = button.closest('.tab-pane').querySelector('.calc-input:focus') || button.closest('.tab-pane').querySelector('.calc-input');
+    saveState();
     input.value = '';
     input.parentElement.querySelector('.calc-result').textContent = '';
     input.focus();
@@ -98,6 +140,7 @@ function clearInput(button) {
 }
 
 function addRow(button) {
+    saveState();
     const pane = button.closest('.tab-pane');
     const display = pane.querySelector('.calc-display');
     const newRow = document.createElement('div');
@@ -115,7 +158,6 @@ function addRow(button) {
 
 function toggleMode(button) {
     isScientificMode = !isScientificMode;
-    button.textContent = isScientificMode ? 'Numeric' : 'Scientific';
     document.querySelectorAll('.tab-pane').forEach(pane => {
         const buttonsContainer = pane.querySelector('.calc-buttons');
         buttonsContainer.innerHTML = isScientificMode ? scientificButtonTemplate : numericButtonTemplate;
@@ -123,6 +165,7 @@ function toggleMode(button) {
 }
 
 function addTab() {
+    saveState();
     tabCount++;
     const tabList = document.getElementById('tabList');
     const tabContent = document.getElementById('tabContent');
@@ -144,7 +187,6 @@ function addTab() {
                 <span class="calc-result"></span>
             </div>
         </div>
-        <button class="toggle-mode" onclick="toggleMode(this)">${isScientificMode ? 'Numeric' : 'Scientific'}</button>
         <div class="calc-buttons">${isScientificMode ? scientificButtonTemplate : numericButtonTemplate}</div>
     `;
     tabContent.appendChild(newPane);
@@ -218,7 +260,6 @@ function loadTabData() {
         displayHTML += '</div>';
         newPane.innerHTML = `
             ${displayHTML}
-            <button class="toggle-mode" onclick="toggleMode(this)">${isScientificMode ? 'Numeric' : 'Scientific'}</button>
             <div class="calc-buttons">${isScientificMode ? scientificButtonTemplate : numericButtonTemplate}</div>
         `;
         tabContent.appendChild(newPane);
@@ -233,28 +274,13 @@ function addInputListeners(input) {
             addRow(input.closest('.tab-pane').querySelector('.calc-btn[onclick*="addRow"]'));
             e.preventDefault();
         }
-        e.preventDefault(); // Block all keyboard input
+        e.preventDefault();
     };
-    input.onkeypress = e => e.preventDefault(); // Block letter input
-}
-
-function deleteSelectedRows() {
-    document.querySelectorAll('.tab-pane').forEach(pane => {
-        const rows = pane.querySelectorAll('.calc-row');
-        if (rows.length > 1) {
-            rows.forEach((row, index) => {
-                if (row.querySelector('.calc-input').value === '' && index !== rows.length - 1) {
-                    row.remove();
-                }
-            });
-        }
-    });
-    saveTabData();
-    const activeInput = document.querySelector('.tab-pane.active .calc-input');
-    if (activeInput) activeInput.focus();
+    input.onkeypress = e => e.preventDefault();
 }
 
 function clearAllRows() {
+    saveState();
     tabsData = { 1: [{ expression: '', result: '' }] };
     localStorage.setItem('calcTabs', JSON.stringify(tabsData));
     loadTabData();

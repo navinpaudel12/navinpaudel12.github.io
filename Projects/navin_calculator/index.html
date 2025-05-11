@@ -7,8 +7,17 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="calculator-container">
+    <div class="header">
         <h1>Navin's Multi-Display Calculator</h1>
+        <button class="menu-toggle" onclick="toggleOptions()">☰</button>
+        <div class="options">
+            <button class="option-btn" onclick="clearAllRows()">Clear All</button>
+            <button class="option-btn" onclick="undo()">Undo</button>
+            <button class="option-btn" onclick="redo()">Redo</button>
+            <button class="option-btn" onclick="toggleNightMode()">Night Mode</button>
+        </div>
+    </div>
+    <div class="calculator-container">
         <div class="tabs">
             <div class="tab-list" id="tabList">
                 <div class="tab active" data-tab="1">Tab 1</div>
@@ -23,13 +32,11 @@
                         <span class="calc-result"></span>
                     </div>
                 </div>
-                <button class="toggle-mode" onclick="toggleMode(this)">Scientific</button>
                 <div class="calc-buttons">
                     <button onclick="appendToInput(this)" class="calc-btn">7</button>
                     <button onclick="appendToInput(this)" class="calc-btn">8</button>
                     <button onclick="appendToInput(this)" class="calc-btn">9</button>
                     <button onclick="appendToInput(this)" class="calc-btn">/</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">÷</button>
                     <button onclick="appendToInput(this)" class="calc-btn">4</button>
                     <button onclick="appendToInput(this)" class="calc-btn">5</button>
                     <button onclick="appendToInput(this)" class="calc-btn">6</button>
@@ -42,16 +49,12 @@
                     <button onclick="appendToInput(this)" class="calc-btn">.</button>
                     <button onclick="appendToInput(this)" class="calc-btn">0</button>
                     <button onclick="appendToInput(this)" class="calc-btn">00</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">000</button>
                     <button onclick="backspace(this)" class="calc-btn">⌫</button>
                     <button onclick="clearInput(this)" class="calc-btn">C</button>
                     <button onclick="addRow(this)" class="calc-btn">Next Line</button>
+                    <button onclick="toggleMode(this)" class="calc-btn">Scientific</button>
                 </div>
             </div>
-        </div>
-        <div class="history-controls">
-            <button class="delete-selected" onclick="deleteSelectedRows()">Delete Selected</button>
-            <button class="clear-all" onclick="clearAllRows()">Clear All</button>
         </div>
     </div>
     <script src="script.js"></script>

@@ -12,16 +12,99 @@ html, body {
 
 body {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     min-height: 100vh;
     background: url('profile-banner1.jpg') no-repeat center center/cover;
+    transition: background-color 0.3s ease;
+}
+
+body.night-mode {
+    background: #1a1a1a;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 700px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.header.night-mode {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.header h1 {
+    color: #fff;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    font-size: 24px;
+}
+
+.menu-toggle {
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.night-mode .menu-toggle {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.night-mode .menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.options {
+    display: none; /* Collapsed by default */
+    gap: 10px;
+}
+
+.options.active {
+    display: flex;
+}
+
+.option-btn {
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: #fff;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.option-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.night-mode .option-btn {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.night-mode .option-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
 }
 
 .calculator-container {
     background: rgba(255, 255, 255, 0.15);
     border-radius: 20px;
-    padding: 30px;
+    padding: 20px;
     backdrop-filter: blur(12px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     width: 100%;
@@ -29,15 +112,12 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     flex-direction: column;
-    height: 90vh; /* Fit within viewport */
+    flex: 1;
 }
 
-h1 {
-    color: #fff;
-    text-align: center;
-    margin-bottom: 20px;
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    font-size: 24px;
+.night-mode .calculator-container {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .tabs {
@@ -54,7 +134,7 @@ h1 {
 
 .tab {
     background: rgba(255, 255, 255, 0.25);
-    padding: 12px 24px;
+    padding: 10px 20px;
     border-radius: 10px;
     cursor: pointer;
     color: #fff;
@@ -70,10 +150,22 @@ h1 {
     background: rgba(255, 255, 255, 0.5);
 }
 
+.night-mode .tab {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.night-mode .tab:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.night-mode .tab.active {
+    background: rgba(255, 255, 255, 0.3);
+}
+
 .add-tab {
     background: rgba(255, 255, 255, 0.25);
     border: none;
-    padding: 12px;
+    padding: 10px;
     border-radius: 50%;
     color: #fff;
     cursor: pointer;
@@ -84,16 +176,23 @@ h1 {
     background: rgba(255, 255, 255, 0.35);
 }
 
+.night-mode .add-tab {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.night-mode .add-tab:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
 .tab-content {
-    flex-grow: 1;
-    margin-bottom: 20px;
+    flex: 1;
+    overflow: hidden;
 }
 
 .tab-pane {
     display: none;
-    height: 100%;
-    display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .tab-pane.active {
@@ -101,10 +200,11 @@ h1 {
 }
 
 .calc-display {
-    margin-bottom: 20px;
-    overflow-y: auto; /* Scrollable display */
-    max-height: 40vh; /* Fixed height for display */
+    flex: 1;
+    overflow-y: auto;
     padding-right: 10px;
+    margin-bottom: 20px;
+    min-height: 100px;
 }
 
 .calc-row {
@@ -129,6 +229,10 @@ h1 {
     color: rgba(255, 255, 255, 0.7);
 }
 
+.night-mode .calc-input {
+    background: rgba(255, 255, 255, 0.15);
+}
+
 .calc-result {
     color: #fff;
     font-size: 20px;
@@ -137,40 +241,29 @@ h1 {
     text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
 
-.toggle-mode {
-    background: rgba(255, 255, 255, 0.25);
-    border: none;
-    padding: 12px 24px;
-    border-radius: 10px;
-    color: #fff;
-    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 20px;
-}
-
-.toggle-mode:hover {
-    background: rgba(255, 255, 255, 0.35);
-}
-
 .calc-buttons {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
-    position: sticky;
-    bottom: 0;
+    gap: 8px;
     background: rgba(255, 255, 255, 0.15);
     padding: 10px;
     border-radius: 10px;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
+
+.night-mode .calc-buttons {
+    background: rgba(0, 0, 0, 0.7);
 }
 
 .calc-btn {
     background: rgba(255, 255, 255, 0.25);
     border: none;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 8px;
     color: #fff;
-    font-size: 18px;
+    font-size: 16px;
     text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -186,24 +279,22 @@ h1 {
     transform: scale(0.95);
 }
 
-.history-controls {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 20px;
+.night-mode .calc-btn {
+    background: rgba(255, 255, 255, 0.15);
 }
 
-.delete-selected, .clear-all {
+.night-mode .calc-btn:hover {
     background: rgba(255, 255, 255, 0.25);
-    border: none;
-    padding: 12px 24px;
-    border-radius: 10px;
-    color: #fff;
-    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-    transition: all 0.3s ease;
 }
 
-.delete-selected:hover, .clear-all:hover {
-    background: rgba(255, 255, 255, 0.35);
+.fraction {
+    display: inline-block;
+    text-align: center;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.fraction sup, .fraction sub {
+    font-size: 10px;
+    line-height: 1;
 }
