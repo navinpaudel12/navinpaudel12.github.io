@@ -5,6 +5,11 @@
     font-family: 'Arial', sans-serif;
 }
 
+html, body {
+    height: 100%;
+    overflow: hidden; /* Prevent overall page scrolling */
+}
+
 body {
     display: flex;
     justify-content: center;
@@ -22,6 +27,9 @@ body {
     width: 100%;
     max-width: 700px;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    height: 90vh; /* Fit within viewport */
 }
 
 h1 {
@@ -77,19 +85,26 @@ h1 {
 }
 
 .tab-content {
+    flex-grow: 1;
     margin-bottom: 20px;
 }
 
 .tab-pane {
     display: none;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .tab-pane.active {
-    display: block;
+    display: flex;
 }
 
 .calc-display {
     margin-bottom: 20px;
+    overflow-y: auto; /* Scrollable display */
+    max-height: 40vh; /* Fixed height for display */
+    padding-right: 10px;
 }
 
 .calc-row {
@@ -122,7 +137,7 @@ h1 {
     text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
 
-.add-row {
+.toggle-mode {
     background: rgba(255, 255, 255, 0.25);
     border: none;
     padding: 12px 24px;
@@ -134,7 +149,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-.add-row:hover {
+.toggle-mode:hover {
     background: rgba(255, 255, 255, 0.35);
 }
 
@@ -142,6 +157,11 @@ h1 {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 12px;
+    position: sticky;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .calc-btn {
@@ -170,6 +190,7 @@ h1 {
     display: flex;
     gap: 10px;
     justify-content: center;
+    margin-top: 20px;
 }
 
 .delete-selected, .clear-all {

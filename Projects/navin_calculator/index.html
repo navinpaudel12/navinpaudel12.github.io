@@ -19,33 +19,33 @@
             <div class="tab-pane active" data-tab="1">
                 <div class="calc-display">
                     <div class="calc-row">
-                        <input type="text" class="calc-input" placeholder="Enter calculation">
+                        <input type="text" class="calc-input" placeholder="Enter calculation" readonly>
                         <span class="calc-result"></span>
                     </div>
                 </div>
-                <button class="add-row" onclick="addRow(this)">Next Line</button>
+                <button class="toggle-mode" onclick="toggleMode(this)">Scientific</button>
                 <div class="calc-buttons">
+                    <button onclick="appendToInput(this)" class="calc-btn">7</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">8</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">9</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">/</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">÷</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">4</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">5</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">6</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">*</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">-</button>
                     <button onclick="appendToInput(this)" class="calc-btn">1</button>
                     <button onclick="appendToInput(this)" class="calc-btn">2</button>
                     <button onclick="appendToInput(this)" class="calc-btn">3</button>
                     <button onclick="appendToInput(this)" class="calc-btn">+</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">4</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">5</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">6</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">-</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">7</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">8</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">9</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">*</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">0</button>
                     <button onclick="appendToInput(this)" class="calc-btn">.</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">/</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">(</button>
-                    <button onclick="appendToInput(this)" class="calc-btn">)</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">0</button>
                     <button onclick="appendToInput(this)" class="calc-btn">00</button>
                     <button onclick="appendToInput(this)" class="calc-btn">000</button>
                     <button onclick="backspace(this)" class="calc-btn">⌫</button>
                     <button onclick="clearInput(this)" class="calc-btn">C</button>
+                    <button onclick="addRow(this)" class="calc-btn">Next Line</button>
                 </div>
             </div>
         </div>
