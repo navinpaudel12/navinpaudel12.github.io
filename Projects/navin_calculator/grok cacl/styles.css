@@ -1,0 +1,188 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url('profile-banner1.jpg') no-repeat center center/cover;
+}
+
+.calculator-container {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 30px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 700px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+h1 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    font-size: 24px;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.tab-list {
+    display: flex;
+    gap: 10px;
+}
+
+.tab {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.tab:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.tab.active {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.add-tab {
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    padding: 12px;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-tab:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.tab-content {
+    margin-bottom: 20px;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.calc-display {
+    margin-bottom: 20px;
+}
+
+.calc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.calc-input {
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    color: #fff;
+    width: 70%;
+    font-size: 20px;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.calc-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.calc-result {
+    color: #fff;
+    font-size: 20px;
+    width: 30%;
+    text-align: right;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.add-row {
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    color: #fff;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.add-row:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.calc-btn {
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    padding: 20px;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 18px;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    transform: scale(1);
+}
+
+.calc-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.05);
+}
+
+.calc-btn:active {
+    transform: scale(0.95);
+}
+
+.history-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.delete-selected, .clear-all {
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    color: #fff;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-selected:hover, .clear-all:hover {
+    background: rgba(255, 255, 255, 0.35);
+}

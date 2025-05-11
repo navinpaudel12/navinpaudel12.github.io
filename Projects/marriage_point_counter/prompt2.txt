@@ -12,5 +12,5 @@ on new round page:
 5. if we set winners status unseen we should not be able to submit the round instead of show prompt that denies and returns to the same page without loosing filled data. currently showing alert but submits after clicking ok on alert.
 6. last button should show the total maal entered on above feilds. Like "Calculate with total Maal: 50" currently not showing total maal value.
 7. user should be able to rename the players name button along with the home button that allows to rename players name.
-8. add status hold. if selected hold on this round calculate the Maal accordingly ie. decrease the total number of player who have selected hold. ie if there are 7 players and 2 have status hold make point of them 0 and calculate maal with assuming 5 players who doesnt have hold.
+8. add status hold.if selected hold on this round calculate the Maal accordingly ie. decrease the total number of player who have selected hold. ie if there are 7 players and 2 have status hold make point of them 0 and calculate maal with assuming 5 players who doesnt have hold.
 9. Display only 'Payable' and 'Receivable' in Red and green colors on the first line, and move other items like Points, Maal, Status, and Winner Tag to the next line within the same table row.
