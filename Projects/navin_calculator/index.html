@@ -1,42 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navin's Calculator</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Navin's Multi-Display Calculator</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="calculator">
-        <input type="text" id="display" disabled>
-        <div class="row">
-            <button onclick="clearDisplay()" class="operator">C</button>
-            <button onclick="backspace()" class="operator">&larr;</button>
-            <button onclick="insert('/')" class="operator">&divide;</button>
-            <button onclick="insert('*')" class="operator">&times;</button>
+    <div class="calculator-container">
+        <h1>Navin's Multi-Display Calculator</h1>
+        <div class="tabs">
+            <div class="tab-list" id="tabList">
+                <div class="tab active" data-tab="1">Tab 1</div>
+            </div>
+            <button class="add-tab" onclick="addTab()">+</button>
         </div>
-        <div class="row">
-            <button onclick="insert('7')">7</button>
-            <button onclick="insert('8')">8</button>
-            <button onclick="insert('9')">9</button>
-            <button onclick="insert('-')" class="operator">-</button>
+        <div class="tab-content" id="tabContent">
+            <div class="tab-pane active" data-tab="1">
+                <div class="calc-display">
+                    <div class="calc-row">
+                        <input type="text" class="calc-input" placeholder="Enter calculation">
+                        <span class="calc-result"></span>
+                    </div>
+                </div>
+                <button class="add-row" onclick="addRow(this)">Next Line</button>
+                <div class="calc-buttons">
+                    <button onclick="appendToInput(this)" class="calc-btn">1</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">2</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">3</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">+</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">4</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">5</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">6</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">-</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">7</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">8</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">9</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">*</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">0</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">.</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">/</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">(</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">)</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">00</button>
+                    <button onclick="appendToInput(this)" class="calc-btn">000</button>
+                    <button onclick="backspace(this)" class="calc-btn">⌫</button>
+                    <button onclick="clearInput(this)" class="calc-btn">C</button>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <button onclick="insert('4')">4</button>
-            <button onclick="insert('5')">5</button>
-            <button onclick="insert('6')">6</button>
-            <button onclick="insert('+')" class="operator">+</button>
-        </div>
-        <div class="row">
-            <button onclick="insert('1')">1</button>
-            <button onclick="insert('2')">2</button>
-            <button onclick="insert('3')">3</button>
-            <button onclick="insert('.')" class="operator">.</button>
-        </div>
-        <div class="row">
-            <button onclick="insert('0')">0</button>
-            <button onclick="insert('(')" class="operator">(</button>
-            <button onclick="insert(')')" class="operator">)</button>
-            <button onclick="calculate()" class="operator">=</button>
+        <div class="history-controls">
+            <button class="delete-selected" onclick="deleteSelectedRows()">Delete Selected</button>
+            <button class="clear-all" onclick="clearAllRows()">Clear All</button>
         </div>
     </div>
     <script src="script.js"></script>
