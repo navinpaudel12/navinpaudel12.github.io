@@ -1,0 +1,16 @@
+it was very good. now need to make same changes:make the entire game stylish, animated and transitions of pages,animated and little large buttons to make easier to click keeping the simple and fresh-looking design, make glass morphism look if possible.
+on home page:
+1. add dark and light mode toggle button that works globally within the entire game.
+2. make new game button bigger and animated.
+3. Add selection button that allows players to select and delete the unwanted games from the history game list.
+4.  there shows history of old games add delete icon button on each list to delete some games.
+on new round page:
+1. when we edit maal it the status should be changed to seen but we should be able to save with seen and 0 maal. currently it is linked to 0 if we put maal 0 status automatically changes to unseen and we cant save seen with 0 maal.
+2. move status to side of the maal input field instead of down,
+3. add delete round button in action column. use outlined icon for both edit and delete button to save space.
+4. on round history table make adjustable columns table where user can adjust the width of the column like in excel.
+5. if we set winners status unseen we should not be able to submit the round instead of show prompt that denies and returns to the same page without loosing filled data. currently showing alert but submits after clicking ok on alert.
+6. last button should show the total maal entered on above feilds. Like "Calculate with total Maal: 50" currently not showing total maal value.
+7. user should be able to rename the players name button along with the home button that allows to rename players name.
+8. add status hold. if selected hold on this round calculate the Maal accordingly ie. decrease the total number of player who have selected hold. ie if there are 7 players and 2 have status hold make point of them 0 and calculate maal with assuming 5 players who doesnt have hold.
+9. Display only 'Payable' and 'Receivable' in Red and green colors on the first line, and move other items like Points, Maal, Status, and Winner Tag to the next line within the same table row.
