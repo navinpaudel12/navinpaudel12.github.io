@@ -126,7 +126,7 @@ body.night-mode {
     border: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 100px); /* Adjust for header */
+    max-height: calc(100vh - 100px);
     min-height: 400px;
 }
 
@@ -238,6 +238,7 @@ body.night-mode {
     width: 70%;
     font-size: 20px;
     text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    cursor: pointer; /* Indicate clickable */
 }
 
 .calc-input::placeholder {

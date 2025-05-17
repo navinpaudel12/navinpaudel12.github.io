@@ -10,12 +10,28 @@
     <div class="container">
         <!-- Home Page -->
         <div id="home-page" class="page">
-            <h1>Marriage Game Counter</h1>
-            <button id="new-game-btn" class="btn">New Game</button>
-            <button id="clear-data-btn" class="btn">Clear All Data</button>
+            <div class="header">
+                <h1>Marriage Game Counter</h1>
+                <div class="header-controls">
+                    <div class="theme-toggle">
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="options-menu">
+                        <button id="options-btn" class="btn small">Options</button>
+                        <div id="options-dropdown" class="dropdown hidden">
+                            <button id="select-games-btn" class="btn small dropdown-item">Select Games</button>
+                            <button id="delete-selected-btn" class="btn small dropdown-item hidden">Delete Selected</button>
+                            <button id="clear-data-btn" class="btn small dropdown-item">Clear All Data</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="new-game-btn" class="btn large">New Game</button>
             <ul id="game-list" class="game-list"></ul>
         </div>
-        
 
         <!-- New Game Setup Page -->
         <div id="setup-page" class="page hidden">
@@ -37,13 +53,14 @@
                 </div>
                 <button type="button" id="add-player-btn" class="btn small">Add Player</button>
                 <button type="button" id="remove-player-btn" class="btn small">Remove Player</button>
-                <button type="submit" class="btn">Save and Start Game</button>
+                <button type="submit" class="btn large">Save and Start Game</button>
             </form>
         </div>
 
         <!-- Game Round Page -->
         <div id="game-page" class="page hidden">
             <button class="home-btn btn">Home</button>
+            <button id="rename-players-btn" class="btn">Rename Players</button>
             <h2 id="game-title">Game</h2>
             <table id="round-table">
                 <thead>
@@ -56,7 +73,17 @@
                 <label>Winner:</label>
                 <select id="winner-select" required></select>
                 <div id="player-round-inputs"></div>
-                <button type="submit" class="btn">Calculate with Total Maal</button>
+                <button type="submit" class="btn large" id="calculate-btn">Calculate with Total Maal: 0</button>
+            </form>
+        </div>
+
+        <!-- Rename Players Page -->
+        <div id="rename-page" class="page hidden">
+            <button class="home-btn btn">Home</button>
+            <h2>Rename Players</h2>
+            <form id="rename-players-form">
+                <div id="rename-player-inputs"></div>
+                <button type="submit" class="btn large">Save Player Names</button>
             </form>
         </div>
     </div>

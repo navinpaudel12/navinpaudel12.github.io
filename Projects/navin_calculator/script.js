@@ -16,51 +16,50 @@ try {
 
 // Button templates for numeric and scientific modes
 const numericButtonTemplate = `
+    <button onclick="addRow(this)" class="calc-btn">Next Line</button>
+    <button onclick="toggleMode(this)" class="calc-btn">Scientific</button>
+    <button onclick="clearInput(this)" class="calc-btn">C</button>
+    <button onclick="backspace(this)" class="calc-btn">⌫</button>
+    <button onclick="appendToInput(this)" class="calc-btn">/</button>
     <button onclick="appendToInput(this)" class="calc-btn">7</button>
     <button onclick="appendToInput(this)" class="calc-btn">8</button>
     <button onclick="appendToInput(this)" class="calc-btn">9</button>
-    <button onclick="appendToInput(this)" class="calc-btn">/</button>
+    <button onclick="appendToInput(this)" class="calc-btn">*</button>
     <button onclick="appendToInput(this)" class="calc-btn">4</button>
     <button onclick="appendToInput(this)" class="calc-btn">5</button>
     <button onclick="appendToInput(this)" class="calc-btn">6</button>
-    <button onclick="appendToInput(this)" class="calc-btn">*</button>
     <button onclick="appendToInput(this)" class="calc-btn">-</button>
     <button onclick="appendToInput(this)" class="calc-btn">1</button>
     <button onclick="appendToInput(this)" class="calc-btn">2</button>
     <button onclick="appendToInput(this)" class="calc-btn">3</button>
     <button onclick="appendToInput(this)" class="calc-btn">+</button>
-    <button onclick="appendToInput(this)" class="calc-btn">.</button>
     <button onclick="appendToInput(this)" class="calc-btn">0</button>
+    <button onclick="appendToInput(this)" class="calc-btn">.</button>
     <button onclick="appendToInput(this)" class="calc-btn">00</button>
-    <button onclick="backspace(this)" class="calc-btn">⌫</button>
-    <button onclick="clearInput(this)" class="calc-btn">C</button>
-    <button onclick="addRow(this)" class="calc-btn">Next Line</button>
-    <button onclick="toggleMode(this)" class="calc-btn">Scientific</button>
 `;
 
 const scientificButtonTemplate = `
+    <button onclick="addRow(this)" class="calc-btn">Next Line</button>
+    <button onclick="toggleMode(this)" class="calc-btn">Numeric</button>
+    <button onclick="clearInput(this)" class="calc-btn">C</button>
+    <button onclick="backspace(this)" class="calc-btn">⌫</button>
+    <button onclick="appendToInput(this)" class="calc-btn">/</button>
     <button onclick="appendToInput(this)" class="calc-btn">sin(</button>
     <button onclick="appendToInput(this)" class="calc-btn">cos(</button>
     <button onclick="appendToInput(this)" class="calc-btn">tan(</button>
+    <button onclick="appendToInput(this)" class="calc-btn">*</button>
     <button onclick="appendToInput(this)" class="calc-btn">log(</button>
     <button onclick="appendToInput(this)" class="calc-btn">ln(</button>
     <button onclick="appendToInput(this)" class="calc-btn">sqrt(</button>
-    <button onclick="appendToInput(this)" class="calc-btn">^</button>
-    <button onclick="appendToInput(this)" class="calc-btn">!</button>
+    <button onclick="appendToInput(this)" class="calc-btn">-</button>
     <button onclick="appendToInput(this)" class="calc-btn">π</button>
     <button onclick="appendToInput(this)" class="calc-btn">e</button>
+    <button onclick="appendToInput(this)" class="calc-btn"><span class="fraction"><sup>a</sup>/<sub>b</sub></span></button>
+    <button onclick="appendToInput(this)" class="calc-btn">+</button>
     <button onclick="appendToInput(this)" class="calc-btn">(</button>
     <button onclick="appendToInput(this)" class="calc-btn">)</button>
-    <button onclick="appendToInput(this)" class="calc-btn"><span class="fraction"><sup>a</sup>/<sub>b</sub></span></button>
-    <button onclick="appendToInput(this)" class="calc-btn">/</button>
-    <button onclick="appendToInput(this)" class="calc-btn">*</button>
-    <button onclick="appendToInput(this)" class="calc-btn">-</button>
-    <button onclick="appendToInput(this)" class="calc-btn">+</button>
-    <button onclick="appendToInput(this)" class="calc-btn">.</button>
-    <button onclick="backspace(this)" class="calc-btn">⌫</button>
-    <button onclick="clearInput(this)" class="calc-btn">C</button>
-    <button onclick="addRow(this)" class="calc-btn">Next Line</button>
-    <button onclick="toggleMode(this)" class="calc-btn">Numeric</button>
+    <button onclick="appendToInput(this)" class="calc-btn">^</button>
+    <button onclick="appendToInput(this)" class="calc-btn">!</button>
 `;
 
 function saveState() {
@@ -105,7 +104,7 @@ function calculate(input) {
     expression = expression.replace(/<span class="fraction"><sup>a<\/sup>\/<sub>b<\/sub><\/span>/g, '/');
     expression = expression.replace(/÷/g, '/');
     try {
-        const result = eval(expression);
+        const result = eval(expression); // Note: eval for simplicity; use math.js in production
         input.parentElement.querySelector('.calc-result').textContent = isNaN(result) ? '' : result;
         saveTabData();
     } catch {
@@ -114,7 +113,7 @@ function calculate(input) {
 }
 
 function appendToInput(button) {
-    const input = button.closest('.tab-pane').querySelector('.calc-input:focus') || button.closest('.tab-pane').querySelector('.calc-input');
+    const input = document.activeElement.classList.contains('calc-input') ? document.activeElement : button.closest('.tab-pane').querySelector('.calc-input');
     saveState();
     const content = button.innerHTML.includes('fraction') ? '<span class="fraction"><sup>a</sup>/<sub>b</sub></span>' : button.textContent;
     input.value += content;
@@ -123,7 +122,7 @@ function appendToInput(button) {
 }
 
 function backspace(button) {
-    const input = button.closest('.tab-pane').querySelector('.calc-input:focus') || button.closest('.tab-pane').querySelector('.calc-input');
+    const input = document.activeElement.classList.contains('calc-input') ? document.activeElement : button.closest('.tab-pane').querySelector('.calc-input');
     saveState();
     input.value = input.value.slice(0, -1);
     input.focus();
@@ -131,7 +130,7 @@ function backspace(button) {
 }
 
 function clearInput(button) {
-    const input = button.closest('.tab-pane').querySelector('.calc-input:focus') || button.closest('.tab-pane').querySelector('.calc-input');
+    const input = document.activeElement.classList.contains('calc-input') ? document.activeElement : button.closest('.tab-pane').querySelector('.calc-input');
     saveState();
     input.value = '';
     input.parentElement.querySelector('.calc-result').textContent = '';
@@ -268,15 +267,24 @@ function loadTabData() {
 }
 
 function addInputListeners(input) {
+    input.onclick = () => input.focus();
     input.oninput = () => calculate(input);
     input.onkeydown = e => {
-        if (e.key === 'Enter') {
-            addRow(input.closest('.tab-pane').querySelector('.calc-btn[onclick*="addRow"]'));
-            e.preventDefault();
+        const validKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '.', '(', ')', 'Enter', 'Backspace'];
+        if (validKeys.includes(e.key)) {
+            if (e.key === 'Enter') {
+                addRow(input.closest('.tab-pane').querySelector('.calc-btn[onclick*="addRow"]'));
+            } else if (e.key === 'Backspace') {
+                saveState();
+                input.value = input.value.slice(0, -1);
+                calculate(input);
+            } else {
+                saveState();
+                input.value += e.key;
+                calculate(input);
+            }
         }
-        e.preventDefault();
     };
-    input.onkeypress = e => e.preventDefault();
 }
 
 function clearAllRows() {
