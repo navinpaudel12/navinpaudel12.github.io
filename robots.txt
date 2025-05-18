@@ -1,0 +1,1 @@
+User-agent: * Allow: /Projects/marriage_point_counter/
