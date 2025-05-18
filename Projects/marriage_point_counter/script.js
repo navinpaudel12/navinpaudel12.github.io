@@ -5,7 +5,7 @@ let games = JSON.parse(localStorage.getItem('marriageGames')) || [];
 const homePage = document.getElementById('home-page');
 const setupPage = document.getElementById('setup-page');
 const gamePage = document.getElementById('game-page');
-const renamePage = document.getElementById('rename-page');
+const settingsPage = document.getElementById('settings-page');
 const gameList = document.getElementById('game-list');
 const newGameBtn = document.getElementById('new-game-btn');
 const gameSettingsForm = document.getElementById('game-settings-form');
@@ -16,19 +16,23 @@ const roundForm = document.getElementById('round-form');
 const winnerSelect = document.getElementById('winner-select');
 const playerRoundInputs = document.getElementById('player-round-inputs');
 const roundTable = document.getElementById('round-table');
+const roundInputTable = document.getElementById('round-input-table');
 const playerHeaders = document.getElementById('player-headers');
 const roundRows = document.getElementById('round-rows');
 const gameTitle = document.getElementById('game-title');
 const calculateBtn = document.getElementById('calculate-btn');
-const renamePlayersBtn = document.getElementById('rename-players-btn');
-const renamePlayersForm = document.getElementById('rename-players-form');
-const renamePlayerInputs = document.getElementById('rename-player-inputs');
+const gameSettingsBtn = document.getElementById('game-settings-btn');
+const gameSettingsUpdateForm = document.getElementById('game-settings-update-form');
+const updatePlayerInputs = document.getElementById('update-player-inputs');
+const addNewPlayerBtn = document.getElementById('add-new-player-btn');
 const selectGamesBtn = document.getElementById('select-games-btn');
 const deleteSelectedBtn = document.getElementById('delete-selected-btn');
 const clearDataBtn = document.getElementById('clear-data-btn');
 const themeToggle = document.getElementById('theme-toggle');
 const optionsBtn = document.getElementById('options-btn');
 const optionsDropdown = document.getElementById('options-dropdown');
+const foulMemberSelect = document.getElementById('foul-member-select');
+const foulInfoBtn = document.getElementById('foul-info-btn');
 
 let currentGameIndex = null;
 let isSelectionMode = false;
@@ -46,7 +50,8 @@ if (localStorage.getItem('theme') === 'dark') {
 }
 
 // Options dropdown toggle
-optionsBtn.addEventListener('click', () => {
+optionsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
     optionsDropdown.classList.toggle('hidden');
 });
 
@@ -55,6 +60,11 @@ document.addEventListener('click', (e) => {
     if (!optionsBtn.contains(e.target) && !optionsDropdown.contains(e.target)) {
         optionsDropdown.classList.add('hidden');
     }
+});
+
+// Foul info prompt
+foulInfoBtn.addEventListener('click', () => {
+    alert('Foul member is who made mistake while dealing the card must have to pay the foul point.');
 });
 
 // Clear data
@@ -71,7 +81,7 @@ clearDataBtn.addEventListener('click', (e) => {
 
 // Show page
 function showPage(page) {
-    const pages = [homePage, setupPage, gamePage, renamePage];
+    const pages = [homePage, setupPage, gamePage, settingsPage];
     pages.forEach(p => {
         p.classList.remove('active');
         p.classList.add('hidden');
@@ -191,9 +201,10 @@ newGameBtn.addEventListener('click', () => {
         <input type="text" class="player-name" placeholder="Player 2" required>
     `;
     gameSettingsForm.reset();
+    document.getElementById('dealer-foul-point').value = 15;
 });
 
-// Add player
+// Add player (setup page)
 addPlayerBtn.addEventListener('click', () => {
     const inputs = playerInputs.querySelectorAll('.player-name');
     if (inputs.length < 8) {
@@ -208,7 +219,7 @@ addPlayerBtn.addEventListener('click', () => {
     }
 });
 
-// Remove player
+// Remove player (setup page)
 removePlayerBtn.addEventListener('click', () => {
     const inputs = playerInputs.querySelectorAll('.player-name');
     if (inputs.length > 2) {
@@ -221,83 +232,116 @@ removePlayerBtn.addEventListener('click', () => {
 // Save game settings
 gameSettingsForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const players = Array.from(playerInputs.querySelectorAll('.player-name'))
-        .map(input => input.value.trim())
-        .filter(name => name);
-    if (players.length < 2 || players.length > 8) {
-        alert('Please enter 2 to 8 players.');
-        return;
+    try {
+        const players = Array.from(playerInputs.querySelectorAll('.player-name'))
+            .map(input => input.value.trim())
+            .filter(name => name);
+        if (players.length < 2 || players.length > 8) {
+            alert('Please enter 2 to 8 players.');
+            return;
+        }
+        if (new Set(players).size !== players.length) {
+            alert('Player names must be unique.');
+            return;
+        }
+        const game = {
+            settings: {
+                pointRate: parseInt(document.getElementById('point-rate').value) || 1,
+                seenPoint: parseInt(document.getElementById('seen-point').value) || 3,
+                unseenPoint: parseInt(document.getElementById('unseen-point').value) || 10,
+                dubleeBonus: parseInt(document.getElementById('dublee-bonus').value) || 5,
+                dealerFoulPoint: parseInt(document.getElementById('dealer-foul-point').value) || 15
+            },
+            players,
+            rounds: [],
+            lastUpdated: new Date().toISOString(),
+            totals: players.reduce((acc, player) => ({ ...acc, [player]: 0 }), {})
+        };
+        games.push(game);
+        currentGameIndex = games.length - 1;
+        saveGames();
+        loadGame(currentGameIndex);
+        showPage(gamePage);
+    } catch (error) {
+        console.error('Error saving new game:', error);
+        alert('Failed to save new game. Please try again.');
     }
-    if (new Set(players).size !== players.length) {
-        alert('Player names must be unique.');
-        return;
-    }
-    const game = {
-        settings: {
-            pointRate: parseInt(document.getElementById('point-rate').value) || 1,
-            seenPoint: parseInt(document.getElementById('seen-point').value) || 3,
-            unseenPoint: parseInt(document.getElementById('unseen-point').value) || 10,
-            dubleeBonus: parseInt(document.getElementById('dublee-bonus').value) || 5
-        },
-        players,
-        rounds: [],
-        lastUpdated: new Date().toISOString(),
-        totals: players.reduce((acc, player) => ({ ...acc, [player]: 0 }), {})
-    };
-    games.push(game);
-    currentGameIndex = games.length - 1;
-    saveGames();
-    loadGame(currentGameIndex);
 });
 
 // Load game
 function loadGame(index) {
-    currentGameIndex = index;
-    const game = games[index];
-    gameTitle.textContent = `Game ${index + 1} (${game.players.join(', ')})`;
+    try {
+        currentGameIndex = index;
+        const game = games[index];
+        gameTitle.textContent = `Game ${index + 1} (${game.players.join(', ')})`;
 
-    // Setup winner select
-    winnerSelect.innerHTML = '<option value="" disabled selected>Select Winner</option>';
-    game.players.forEach(player => {
-        const option = document.createElement('option');
-        option.value = player;
-        option.textContent = player;
-        winnerSelect.appendChild(option);
-    });
+        // Setup winner select
+        winnerSelect.innerHTML = '<option value="" disabled selected>Select Winner</option>';
+        game.players.forEach(player => {
+            const option = document.createElement('option');
+            option.value = player;
+            option.textContent = player;
+            winnerSelect.appendChild(option);
+        });
 
-    // Setup round inputs
-    playerRoundInputs.innerHTML = '';
-    game.players.forEach(player => {
-        const div = document.createElement('div');
-        div.className = 'player-input';
-        div.innerHTML = `
-            <h4>${player}</h4>
-            <label>Maal:</label>
-            <input type="number" min="0" data-player="${player}" class="maal-input" value="0">
-            <label>Status:</label>
-            <select data-player="${player}" class="status-select">
-                <option value="unseen">Unseen</option>
-                <option value="seen">Seen</option>
-                ${game.players.length >= 4 ? '<option value="dublee">Dublee</option>' : ''}
-                <option value="hold">Hold</option>
-            </select>
-        `;
-        playerRoundInputs.appendChild(div);
-    });
+        // Setup foul member select
+        foulMemberSelect.innerHTML = '<option value="none">None</option>';
+        game.players.forEach(player => {
+            const option = document.createElement('option');
+            option.value = player;
+            option.textContent = player;
+            foulMemberSelect.appendChild(option);
+        });
 
-    // Setup table headers
-    playerHeaders.innerHTML = '<th>Round</th>';
-    game.players.forEach(player => {
-        playerHeaders.innerHTML += `<th>${player}</th>`;
-    });
-    playerHeaders.innerHTML += '<th>Actions</th>';
+        // Setup round input table
+        playerRoundInputs.innerHTML = '';
+        game.players.forEach(player => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${player}</td>
+                <td><input type="number" min="0" data-player="${player}" class="maal-input" value="0"></td>
+                <td>
+                    <select data-player="${player}" class="status-select">
+                        <option value="unseen">Unseen</option>
+                        <option value="seen">Seen</option>
+                        ${game.players.length >= 4 ? '<option value="dublee">Dublee</option>' : ''}
+                        <option value="hold">Hold</option>
+                    </select>
+                </td>
+                <td><button type="button" class="set-winner-btn" data-player="${player}">👑</button></td>
+            `;
+            playerRoundInputs.appendChild(row);
+        });
 
-    // Load rounds
-    renderRounds();
-    updateTotalMaal();
-    roundForm.reset();
-    winnerSelect.value = '';
-    showPage(gamePage);
+        // Set readonly for hold status during initialization
+        playerRoundInputs.querySelectorAll('.status-select').forEach(select => {
+            const player = select.dataset.player;
+            const maalInput = playerRoundInputs.querySelector(`.maal-input[data-player="${player}"]`);
+            if (select.value === 'hold') {
+                maalInput.value = 0;
+                maalInput.setAttribute('readonly', 'readonly');
+            }
+        });
+
+        // Setup table headers
+        playerHeaders.innerHTML = '<th>Round</th>';
+        game.players.forEach(player => {
+            playerHeaders.innerHTML += `<th>${player}</th>`;
+        });
+        playerHeaders.innerHTML += '<th>Actions</th>';
+
+        // Load rounds
+        renderRounds();
+        updateTotalMaal();
+        roundForm.reset();
+        winnerSelect.value = '';
+        foulMemberSelect.value = 'none';
+        showPage(gamePage);
+    } catch (error) {
+        console.error('Error loading game:', error);
+        alert('Failed to load game. Returning to home page.');
+        showPage(homePage);
+    }
 }
 
 // Update total maal display
@@ -310,8 +354,8 @@ function updateTotalMaal() {
     calculateBtn.textContent = `Calculate with Total Maal: ${totalMaal}`;
 }
 
-// Handle maal and status input
-playerRoundInputs.addEventListener('input', (e) => {
+// Handle maal, status, and set winner
+roundInputTable.addEventListener('input', (e) => {
     if (e.target.classList.contains('maal-input')) {
         const player = e.target.dataset.player;
         const statusSelect = playerRoundInputs.querySelector(`.status-select[data-player="${player}"]`);
@@ -323,14 +367,28 @@ playerRoundInputs.addEventListener('input', (e) => {
     }
 });
 
-playerRoundInputs.addEventListener('change', (e) => {
+roundInputTable.addEventListener('change', (e) => {
     if (e.target.classList.contains('status-select')) {
         const player = e.target.dataset.player;
         const maalInput = playerRoundInputs.querySelector(`.maal-input[data-player="${player}"]`);
         if (e.target.value === 'unseen' || e.target.value === 'hold') {
             maalInput.value = 0;
+            if (e.target.value === 'hold') {
+                maalInput.setAttribute('readonly', 'readonly');
+            } else {
+                maalInput.removeAttribute('readonly');
+            }
             updateTotalMaal();
+        } else {
+            maalInput.removeAttribute('readonly');
         }
+    }
+});
+
+roundInputTable.addEventListener('click', (e) => {
+    if (e.target.classList.contains('set-winner-btn')) {
+        const player = e.target.dataset.player;
+        winnerSelect.value = player;
     }
 });
 
@@ -349,19 +407,31 @@ roundForm.addEventListener('submit', (e) => {
         maal: {},
         status: {},
         points: {},
-        amounts: {}
+        amounts: {},
+        foulMember: foulMemberSelect.value
     };
 
     let totalMaal = 0;
     const inputs = playerRoundInputs.querySelectorAll('.maal-input');
     const statuses = playerRoundInputs.querySelectorAll('.status-select');
 
+    // Validate hold status has zero maal
+    let hasInvalidHold = false;
     inputs.forEach(input => {
         const player = input.dataset.player;
         const maal = parseInt(input.value) || 0;
+        const statusSelect = playerRoundInputs.querySelector(`.status-select[data-player="${player}"]`);
+        if (statusSelect.value === 'hold' && maal !== 0) {
+            hasInvalidHold = true;
+        }
         round.maal[player] = maal;
         totalMaal += maal;
     });
+
+    if (hasInvalidHold) {
+        alert('Players with "Hold" status must have zero maal.');
+        return;
+    }
 
     let hasInvalidWinnerStatus = false;
     statuses.forEach(select => {
@@ -388,14 +458,8 @@ roundForm.addEventListener('submit', (e) => {
         return;
     }
 
-    // Winners cannot be less than 0 Maal
-    if (round.maal[winner] < 0) {
-        alert('Winner cannot have negative Maal.');
-        return;
-    }
-
     // Calculate points
-    const { seenPoint, unseenPoint, dubleeBonus, pointRate } = game.settings;
+    const { seenPoint, unseenPoint, dubleeBonus, pointRate, dealerFoulPoint } = game.settings;
     const numActivePlayers = activePlayers.length;
     const isDubleeWin = round.status[winner] === 'dublee';
 
@@ -431,7 +495,22 @@ roundForm.addEventListener('submit', (e) => {
             round.points[player] = (round.maal[player] * numActivePlayers) - (totalMaal + (isDubleeWin ? dubleeBonus : 0));
             round.amounts[player] = round.points[player] * pointRate;
         }
-        game.totals[player] += round.amounts[player];
+    });
+
+    // Handle foul member
+    if (round.foulMember !== 'none') {
+        const foulAmount = dealerFoulPoint * pointRate;
+        round.amounts[round.foulMember] -= foulAmount;
+        const otherPlayers = game.players.filter(p => p !== round.foulMember && round.status[p] !== 'hold');
+        const share = foulAmount / (otherPlayers.length || 1);
+        otherPlayers.forEach(player => {
+            round.amounts[player] += share;
+        });
+    }
+
+    // Update game.totals
+    game.players.forEach(player => {
+        game.totals[player] = (game.totals[player] || 0) + (round.amounts[player] || 0);
     });
 
     game.rounds.push(round);
@@ -440,7 +519,11 @@ roundForm.addEventListener('submit', (e) => {
     renderRounds();
     roundForm.reset();
     winnerSelect.value = '';
-    inputs.forEach(input => (input.value = '0'));
+    foulMemberSelect.value = 'none';
+    inputs.forEach(input => {
+        input.value = '0';
+        input.removeAttribute('readonly');
+    });
     statuses.forEach(select => (select.value = 'unseen'));
     updateTotalMaal();
 });
@@ -454,17 +537,18 @@ function renderRounds() {
         const row = document.createElement('tr');
         row.innerHTML = `<td>Round ${index + 1}</td>`;
         game.players.forEach(player => {
-            const amount = round.amounts[player];
+            const amount = round.amounts[player] || 0;
             const className = amount < 0 ? 'payable' : amount > 0 ? 'receivable' : '';
             const statusIcon = round.status[player] === 'seen' ? '👀' :
                              round.status[player] === 'unseen' ? '🙈' :
                              round.status[player] === 'dublee' ? '🎴' : '⏸️';
             const winnerIcon = player === round.winner ? '🏆' : '';
+            const foulNote = round.foulMember === player ? ' (Foul)' : '';
             row.innerHTML += `
                 <td>
-                    <span class="${className}">${amount}</span>
+                    <span class="${className}">${amount}${foulNote}</span>
                     <div class="details">
-                        Points: ${round.points[player]} | Maal: ${round.maal[player]}
+                        Points: ${round.points[player] || 0} | Maal: ${round.maal[player] || 0}
                         <span class="status-icon">${statusIcon}</span>
                         <span class="winner-icon">${winnerIcon}</span>
                     </div>
@@ -484,7 +568,7 @@ function renderRounds() {
     const totalRow = document.createElement('tr');
     totalRow.innerHTML = '<td><strong>Total</strong></td>';
     game.players.forEach(player => {
-        const total = game.totals[player];
+        const total = game.totals[player] || 0;
         const className = total < 0 ? 'payable' : total > 0 ? 'receivable' : '';
         totalRow.innerHTML += `<td><strong class="${className}">${total}</strong></td>`;
     });
@@ -499,16 +583,23 @@ function editRound(roundIndex) {
 
     // Deduct current round amounts from totals
     game.players.forEach(player => {
-        game.totals[player] -= round.amounts[player];
+        game.totals[player] = (game.totals[player] || 0) - (round.amounts[player] || 0);
     });
 
     // Populate form
     winnerSelect.value = round.winner;
+    foulMemberSelect.value = round.foulMember || 'none';
     playerRoundInputs.querySelectorAll('.maal-input').forEach(input => {
-        input.value = round.maal[input.dataset.player];
+        input.value = round.maal[input.dataset.player] || 0;
+        const statusSelect = playerRoundInputs.querySelector(`.status-select[data-player="${input.dataset.player}"]`);
+        if (statusSelect.value === 'hold') {
+            input.setAttribute('readonly', 'readonly');
+        } else {
+            input.removeAttribute('readonly');
+        }
     });
     playerRoundInputs.querySelectorAll('.status-select').forEach(select => {
-        select.value = round.status[select.dataset.player];
+        select.value = round.status[select.dataset.player] || 'unseen';
     });
 
     // Remove round
@@ -524,8 +615,9 @@ function deleteRound(roundIndex) {
     if (confirm('Are you sure you want to delete this round?')) {
         const game = games[currentGameIndex];
         const round = game.rounds[roundIndex];
+        // Deduct round amounts from totals
         game.players.forEach(player => {
-            game.totals[player] -= round.amounts[player];
+            game.totals[player] = (game.totals[player] || 0) - (round.amounts[player] || 0);
         });
         game.rounds.splice(roundIndex, 1);
         game.lastUpdated = new Date().toISOString();
@@ -534,65 +626,121 @@ function deleteRound(roundIndex) {
     }
 }
 
-// Rename players
-renamePlayersBtn.addEventListener('click', () => {
+// Game settings
+gameSettingsBtn.addEventListener('click', () => {
     const game = games[currentGameIndex];
-    renamePlayerInputs.innerHTML = '';
+    document.getElementById('update-point-rate').value = game.settings.pointRate;
+    document.getElementById('update-seen-point').value = game.settings.seenPoint;
+    document.getElementById('update-unseen-point').value = game.settings.unseenPoint;
+    document.getElementById('update-dublee-bonus').value = game.settings.dubleeBonus;
+    document.getElementById('update-dealer-foul-point').value = game.settings.dealerFoulPoint;
+    updatePlayerInputs.innerHTML = '';
     game.players.forEach(player => {
         const input = document.createElement('input');
         input.type = 'text';
         input.className = 'player-name';
         input.value = player;
         input.required = true;
-        renamePlayerInputs.appendChild(input);
+        updatePlayerInputs.appendChild(input);
     });
-    showPage(renamePage);
+    showPage(settingsPage);
 });
 
-renamePlayersForm.addEventListener('submit', (e) => {
+// Add new player (settings page)
+addNewPlayerBtn.addEventListener('click', () => {
+    const inputs = updatePlayerInputs.querySelectorAll('.player-name');
+    if (inputs.length < 8) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'player-name';
+        input.placeholder = `Player ${inputs.length + 1}`;
+        input.required = true;
+        updatePlayerInputs.appendChild(input);
+    } else {
+        alert('Maximum 8 players allowed.');
+    }
+});
+
+gameSettingsUpdateForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const game = games[currentGameIndex];
-    const newPlayers = Array.from(renamePlayerInputs.querySelectorAll('.player-name'))
+    const newPlayers = Array.from(updatePlayerInputs.querySelectorAll('.player-name'))
         .map(input => input.value.trim())
         .filter(name => name);
-    if (newPlayers.length !== game.players.length) {
-        alert('Please provide names for all players.');
+    if (newPlayers.length < 2 || newPlayers.length > 8) {
+        alert('Please provide 2 to 8 players.');
         return;
     }
     if (new Set(newPlayers).size !== newPlayers.length) {
         alert('Player names must be unique.');
         return;
     }
+
+    // Identify added players
+    const addedPlayers = newPlayers.filter(p => !game.players.includes(p));
+    const oldPlayers = game.players.filter(p => newPlayers.includes(p));
+    if (addedPlayers.length > 0) {
+        addedPlayers.forEach(newPlayer => {
+            game.totals[newPlayer] = 0;
+            game.rounds.forEach(round => {
+                round.maal[newPlayer] = 0;
+                round.status[newPlayer] = 'hold';
+                round.points[newPlayer] = 0;
+                round.amounts[newPlayer] = 0;
+            });
+        });
+    }
+
+    // Update player names
     const oldToNew = {};
     game.players.forEach((oldName, i) => {
-        oldToNew[oldName] = newPlayers[i];
+        if (i < oldPlayers.length) {
+            oldToNew[oldName] = newPlayers[i];
+        }
     });
+
     game.players = newPlayers;
     game.totals = Object.keys(game.totals).reduce((acc, oldName) => {
-        acc[oldToNew[oldName]] = game.totals[oldName];
+        const newName = oldToNew[oldName] || oldName;
+        acc[newName] = game.totals[oldName];
         return acc;
     }, {});
     game.rounds.forEach(round => {
         round.maal = Object.keys(round.maal).reduce((acc, oldName) => {
-            acc[oldToNew[oldName]] = round.maal[oldName];
+            const newName = oldToNew[oldName] || oldName;
+            acc[newName] = round.maal[oldName];
             return acc;
         }, {});
         round.status = Object.keys(round.status).reduce((acc, oldName) => {
-            acc[oldToNew[oldName]] = round.status[oldName];
+            const newName = oldToNew[oldName] || oldName;
+            acc[newName] = round.status[oldName];
             return acc;
         }, {});
         round.points = Object.keys(round.points).reduce((acc, oldName) => {
-            acc[oldToNew[oldName]] = round.points[oldName];
+            const newName = oldToNew[oldName] || oldName;
+            acc[newName] = round.points[oldName];
             return acc;
         }, {});
         round.amounts = Object.keys(round.amounts).reduce((acc, oldName) => {
-            acc[oldToNew[oldName]] = round.amounts[oldName];
+            const newName = oldToNew[oldName] || oldName;
+            acc[newName] = round.amounts[oldName];
             return acc;
         }, {});
-        if (round.winner) {
+        if (round.winner && oldToNew[round.winner]) {
             round.winner = oldToNew[round.winner];
         }
+        if (round.foulMember && round.foulMember !== 'none' && oldToNew[round.foulMember]) {
+            round.foulMember = oldToNew[round.foulMember];
+        }
     });
+
+    game.settings = {
+        pointRate: parseInt(document.getElementById('update-point-rate').value) || 1,
+        seenPoint: parseInt(document.getElementById('update-seen-point').value) || 3,
+        unseenPoint: parseInt(document.getElementById('update-unseen-point').value) || 10,
+        dubleeBonus: parseInt(document.getElementById('update-dublee-bonus').value) || 5,
+        dealerFoulPoint: parseInt(document.getElementById('update-dealer-foul-point').value) || 15
+    };
     game.lastUpdated = new Date().toISOString();
     saveGames();
     loadGame(currentGameIndex);
@@ -604,6 +752,7 @@ function saveGames() {
         localStorage.setItem('marriageGames', JSON.stringify(games));
         loadGameList();
     } catch (e) {
+        console.error('Error saving games:', e);
         alert('Failed to save games. Storage might be full.');
     }
 }

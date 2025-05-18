@@ -14,3 +14,23 @@ on new round page:
 7. user should be able to rename the players name button along with the home button that allows to rename players name.
 8. add status hold.if selected hold on this round calculate the Maal accordingly ie. decrease the total number of player who have selected hold. ie if there are 7 players and 2 have status hold make point of them 0 and calculate maal with assuming 5 players who doesnt have hold.
 9. Display only 'Payable' and 'Receivable' in Red and green colors on the first line, and move other items like Points, Maal, Status, and Winner Tag to the next line within the same table row.
+
+1. add a little contour to texts to improve readability
+2. change backgroud tint from 0.7 to 0.1 in light mode and 0.35 to dark mode
+3. the mode toggle button doestnt contain the symbol of mode toogle add dark/light mode icon to identify the usage of button
+4. change app name to Navin's Marriage game point calculator and allign to center
+5. add set winner button for each player at the right side of Maal and status which makes easier to select the winner
+6. put new round section into a adjustable table like table in scoreboard and move headings like: maal, status,set winner to heading row
+7. add Dealer foul point in new game setup default entered is 15 and add foul member selection dropdown at the last of new round section above 'calculate total maal' button. default selected none. add a small info button 🛈 to it which shows a small prompt "Foul member is who made misktake while dealing the card must have to pay the foul point"
+8. add a game setting button along with the home button in which can update the game settings like, point rate,seen point etc. and remove rename players button the players can be renamed from game setting.
+9. responsivenes: the options prompt goes outside of window in mobile view, the scoreboard table goes outside of the window and makes whole page scrollable make scrollable only for this table not entire page and also fix other responsiveness on both mobile and desktop view
+10. add a outlined window to make more glassmorphim look
+11. other things working properly hence keep in mind.
+
+
+1. youve added same contour as the text make it opposite, 
+2. the buttons home and game settings are overlapped to each other and also covering the game name. 
+3. the input texts are not  visible in dark mode due to black text in dark mode, 
+4. you have corrected the responsiveness of scoreboard table but new round table still going outside of the window, 
+5. add ©Navin Paudel at the bottom of the page.,
+6. the two icons sun and moon are upside down make it side by side
