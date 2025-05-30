@@ -3,6 +3,11 @@
  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
     <!-- SEO Meta Tags -->
     <title>Marriage Card Game Scoreboard and Marriage card point calculator - Navin Paudel</title>
     <meta name="description" content="Track scores for the Marriage card game with this free, easy-to-use web app. Perfect for game nights, with real-time score calculations. marriage card game point calculotor. navinpaudel12 navin's marriage_point_counter">
@@ -25,12 +30,12 @@
 <body>
     <div class="container">
         <!-- Home Page -->
-        <div id="home-page" class="page">
+        <div id="home-page" class="page active">
             <div class="header">
                 <h1>Navin's Marriage Card Game Point Calculator</h1>
                 <div class="header-controls">
                     <div class="options-menu">
-                        <button id="options-btn" class="btn small">Options</button>
+                        <button id="options-btn" class="btn small">☰</button>
                         <div id="options-dropdown" class="dropdown hidden">
                             <button id="select-games-btn" class="btn small dropdown-item">Select Games</button>
                             <button id="delete-selected-btn" class="btn small dropdown-item hidden">Delete Selected</button>
@@ -153,6 +158,13 @@
             "name": "Navin Paudel"
         }
     }
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.error('Service Worker registration failed:', err));
+            });
+        }
     </script>
 </body>
 </html>

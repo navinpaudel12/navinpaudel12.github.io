@@ -562,3 +562,35 @@ td .details {
         padding-top: 50px;
     }
 }
+/* PWA Standalone Mode */
+@media (display-mode: standalone) {
+    body {
+        padding-top: 20px;
+    }
+    .home-btn, #game-settings-btn {
+        top: 20px;
+    }
+    #game-page, #setup-page, #settings-page {
+        padding-top: 60px;
+    }
+}
+
+/* Optimize images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Enhance table responsiveness */
+#round-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 600px) {
+    #round-table th, #round-table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
